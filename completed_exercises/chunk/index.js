@@ -37,3 +37,17 @@ module.exports = chunk;
 //
 //   return chunked;
 // }
+
+// function chunk(array, size) {
+//   let arr = [];
+//   const result = [];
+//   array.forEach(num => {
+//     arr.push(num);
+//     if (arr.length === size) {
+//       result.push(arr);
+//       arr = [];
+//     }
+//   });
+//   if (arr.length) result.push(arr);
+//   return result;
+// }

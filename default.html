@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" xml:lang="en" style="height: 100%; overflow: hidden;">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+
+  <title>PJM</title>
+
+
+  <script type="text/javascript" src="deployInfo.js"></script>
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+</head>
+
+<body class="claro"
+  style="height: 100%; width: 100%; margin: 0; padding: 0; background-color: rgb(230, 247, 255); position: fixed;">
+
+  <!--header-->
+  <div class="head" style="background-color: #ffffff;">
+
+    <img src="static/head/logo.gif" class="logo" alt="" onclick="window.location = 'https://pjm.com/'"
+      style="cursor: pointer;" />
+    <label class="companyname"></label>
+
+    <input type="button" class="ismbutton" value="Log Out"
+      onclick="window.location='https://www.pjm.com/library/maps.aspx'" style="display: none;" />
+
+  </div>
+
+  <!--map-->
+  <div id="content-container" dojotype="dijit.layout.BorderContainer" design="headline" gutters="false"
+    style="width: 100%; height: 100% !important; margin: 0;">
+    <div id="map" dojotype="dijit.layout.ContentPane" region="center" class="busy"
+      style="width: 100%; height: 100% !important;"></div>
+
+    <!--map cords-->
+    <span id="mapCords"></span>
+    <!--disclaimer-->
+    <div id="pjm_disclaimer" style="display: none;">
+      <p style="padding: 3px;">
+        PJM expressly disclaims any obligation to correct or update any information or any warranty of any kind,
+        whether express or implied, as to any information or other matters contained hereon. Entities relying on
+        the information contained herein do so at their own risk. In no event shall PJM be liable for any
+        damages of any kind, including, but not limited to, direct, indirect, general, special, incidental or
+        consequential damages arising out of any use of information contained herein.
+      </p>
+    </div>
+
+
+    <!-- menu -->
+    <div id="navmenu" style="display: none;">
+      <ul id="menubuttons">
+        <li id="navmenuclose" title="Expand"><span></span><label>Collapse</label></li>
+        <li var="search_container" id="search-navmenu" title="Search">
+          <span></span><label>Search</label>
+        </li>
+        <li var="menu-Lasso" id="lasso-navmenu" title="Lasso Tool" class="menuloading">
+          <span></span><label>Lasso Tool</label>
+        </li>
+        <li var="menu-Queue" id="queue-navmenu" title="Queue Filter" class="menuloading">
+          <span></span><label>Queue Filter</label>
+        </li>
+        <li var="menu-Generator" id="generator-navmenu" title="Generator Deactivations" class="menuloading">
+          <span></span><label>Generator Deactivations</label>
+        </li>
+        <li var="menu-ProjectsFilter" id="projects-navmenu" title="Projects Filter" class="menuloading">
+          <span></span><label>Projects Filter</label>
+        </li>
+        <li var="menu-Flowgate" id="flowgate-navmenu" title="Proposal and Flowgate Analysis" class="menuloading">
+          <span></span><label>Proposal and Flowgate Analysis</label></li>
+
+        <li var="menu-Substation" id="substation-navmenu" title="Substations" class="menuloading">
+          <span></span><label>Substations</label>
+        </li>
+        <li var="menu-kVfilter" id="kVfilter-navmenu" title="kV Filter" class="menuloading">
+          <span></span><label>kV Filter</label>
+        </li>
+        <li var="menu-GasPipeline" id="gasPipeline-navmenu" style="display: none;" title="Gas Pipelines"
+          class="menuloadingx"><span></span><label>Gas Pipelines</label>
+        </li>
+        <li var="menu-pmu" id="pmu-navmenu" style="display: none;" title="Synchrophasors" class="menuloading">
+          <span></span><label>Synchrophasors</label>
+        </li>
+        <li var="menu-Layers" id="layers-navmenu" style="display: none;" title="Layers" class="menuloading">
+          <span></span><label>Layers</label>
+        </li>
+        <li var="menu-Basemaps" id="basemaps-navmenu" style="display: none;" title="Base Maps" class="menuloading">
+          <span></span><label>Base Maps</label>
+        </li>
+        <li var="menu-Draw" id="draw-navmenu" style="display: none;" title="Drawing" class="menuloading">
+          <span></span><label>Drawing</label>
+        </li>
+        <li var="menu-Measurement" id="measurement-navmenu" style="display: none;" title="Measure" class="menuloading">
+          <span></span><label>Measure</label></li>
+        <li var="menu-Legend" id="legend-navmenu" title="Legend" class="menuloading">
+          <span></span><label>Legend</label>
+        </li>
+      </ul>
+    </div>
+    <!-- menu -->
+    <!-- build number -->
+    <div class="buildnum"></div>
+
+    <div class="PDIPDFCopytoclipboardMessage" onclick="$(this).hide();"
+      style="display: none; position: absolute;left: 39%;top: 12%;color: #000;z-index: 5000;font-family: Arial;font-weight: bolder;background-color: #fff;border-radius: 10px;padding: 20px; display: none;">
+      <div style="float: right;margin-top: -14px;margin: -16px -10px 0px 0px;cursor: pointer;">x</div>
+      <span style="margin: 0 0 0 0px; vertical-align: text-top;">
+        Path to the PDF was copied to your clipboard.
+      </span>
+    </div>
+    <div class="PDIGroupJoinMessage"
+      style="display: none; position: absolute;left: 25%; bottom: 43%;color: #000;z-index: 5000;font-family: Arial;font-weight: bolder;background-color: #fff;border-radius: 10px;padding: 20px; display: none;">
+      <div style="float: right;margin-top: -14px;margin: -16px -10px 0px 0px;cursor: pointer;"
+        onclick="$(this).parent().hide();">
+        x
+      </div>
+      <span style="margin: 0 0 0 0px; vertical-align: text-top;" onclick="emailForPDIAccess();">
+        <label>Please contact GIS Support (</label><label style='color: blue;'>GISSupt@pjm.com</label><label>
+          )
+          for access to Real-Time substation One-Line diagrams.
+        </label>
+      </span>
+
+    </div>
+  </div>
+
+  <div id="components">
+
+    <!-- substation Detail Panel -->
+    <div class="placeholderForEMSNavigation"></div>
+
+    <div id="substationDetailPanel">
+      <div id="onlySubPanel" style="display: none;">
+        <div class="menuheader substationdetailmenuheader">
+          <label>Details</label>
+          <div class="menuminmaxclose">
+            <div class="close" title="Close"></div>
+            <div class="min" title="Minimize" style="display: none;"></div>
+            <div class="max" title="Maximize" style="display: none;"></div>
+            <div id="menuclose"></div>
+            <div id="menuopen"></div>
+          </div>
+        </div>
+
+        <div class="subHeader">
+          <a id="collapseAll" href="">Collapse All</a>
+          <a id="expandAll" href="">Expand All</a>
+        </div>
+
+        <div id="substationAccordion"></div>
+      </div>
+
+      <!--nav-->
+      <div class="navigation">
+        <div id="navigationslider"></div>
+        <div style="text-align: center; width: 75px; margin-left: auto; margin-right: auto;">
+          <img id="navigationwidget" src="static/nav/navigationwidget.png" usemap="#navigationwidget" draggable="false"
+            border="0" width="75" height="298" alt="" />
+          <map id="_navigationwidget" name="navigationwidget">
+            <area shape="rect" coords="20,86,55,122" alt="" title="Zoom In" var="in" />
+            <area shape="rect" coords="21,129,55,164" alt="" title="Zoom Out" var="out" />
+            <area shape="poly" coords="15,66,36,75,61,66,46,51,27,51," alt="" title="South" var="south" />
+            <area shape="poly" coords="28,26,15,11,37,3,60,11,46,26," alt="" title="North" var="north" />
+            <area shape="poly" coords="50,31,65,15,74,40,64,61,50,47," alt="" title="East" var="east" />
+            <area shape="poly" coords="11,15,25,29,25,48,13,63,2,36," alt="" title="West" var="west" />
+          </map>
+        </div>
+      </div>
+      <!--nav-->
+    </div>
+
+    <!-- substation Detail Panel -->
+    <!--overview-->
+    <div id="overview" class="overview">
+      <div class="overviewtoggle"></div>
+      <div id="overviewDiv">
+        <div dojotype="dijit.layout.BorderContainer" gutters="false" style="width: 100%; height: 100%;">
+          <div id="overviewmap" dojotype="dijit.layout.ContentPane" region="center"
+            style="width: 250px; height: 150px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- esri Popup placeholder-->
+    <div class="esriPopup_placeholder"></div>
+
+    <!-- dialogs -->
+    <!-- search -->
+    <div id="menu-Search" style="display: none;" class="autocloseitem" title="Search">
+      <div id="search_container" class="ui-corner-all search flex-column">
+        <div class="search_titlebar">
+          <div class="close"></div>
+          <label>Search</label>
+        </div>
+        <div id="searches">
+          <div id="typeahead" class="flex">
+            <input id="searchinput" type="text" value="" class="typeahead" />
+            <input type="submit" class="searchButton" value="Search" style="display:none;" onclick="search.search()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--lasso-->
+    <div id="menu-Lasso" class="autocloseitem" style="display: none;" title="Lasso Tool">
+      <div id="lassoContent">
+        <p>Use the lasso tool to view specific planning information within a defined geographic area.</p>
+        <ol id="lassoList">
+          <li>Click the Lasso button.</li>
+          <li>Click and hold your left mouse button at a starting location.</li>
+          <li>Circle an area with you mouse.</li>
+          <li>Release the mouse button to complete your lasso.</li>
+        </ol>
+        <p>
+          Once the lasso is complete, you can download a spreadsheet of data pertaining to the items inside
+          the lassoed area.
+        </p>
+        <p id="lassoResult">Results as of <span id="resultDate"></span></p>
+      </div>
+
+      <div id="lassoFooter" class="footerContainer">
+        <div class="spaceBetweenFlex">
+          <div id="leftFlex">
+            <div id="lassoBtn" class="grey_btn" var="lasso" title="lasso_All">Lasso</div>
+            <div id="lassoClearBtn" class="grey_btn2">Clear</div>
+          </div>
+          <div id="rightFlex">
+            <div id="lassoCancelBtn" class="grey_btn" var="rto" aria-describedby="menu-Lasso">Cancel</div>
+            <div id="lassoDownloadBtn" class="grey_btn2" var="rto">Download</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- search -->
+    <!-- layers -->
+    <div id="menu-Layers" style="display: none;" class="autocloseitem" title="Layers">
+      <div class="menu-scroll scrolls" id="layers">
+        <!-- place holders for order -->
+        <div for="ph_queue"></div>
+        <div for="ph_zones"></div>
+        <div for="ph_backbone"></div>
+        <div for="ph_nonmemberbackbone"></div>
+        <div for="ph_transmissionlines"></div>
+        <div for="ph_nonmembertransmissionlines"></div>
+        <div for="ph_substations"></div>
+        <div for="ph_nonmembersubstations"></div>
+        <div for="ph_yards"></div>
+        <div for="ph_taps"></div>
+        <div for="ph_states"></div>
+        <div for="ph_stateboundaries"></div>
+        <div for="ph_counties"></div>
+        <div for="ph_urbanareas"></div>
+
+      </div>
+    </div>
+
+    <!-- layers -->
+    <!-- kVfilter -->
+    <div id="menu-kVfilter" style="display: none;" class="autocloseitem" title="kV Filter">
+      <div class="menu-scroll scrolls" id="kVfilter">
+        <div class="kvallnone">
+          <input type="checkbox" id="kvallnone" />
+          <label style="background-color: #ffffff;"></label>
+          <span>All</span>
+        </div>
+        <div class="kv_container">
+          <div class="kv_left">
+            <div class="kVfilter">
+              <input type="checkbox" rel="=69" value="69" />
+              <label class="kv69"></label>
+              <div class="kvcolor kv69"></div>
+              <span>69</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=115" value="115" />
+              <label class="kv115"></label>
+              <div class="kvcolor kv115"></div>
+              <span>115</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=120" value="120" />
+              <label class="kv120"></label>
+              <div class="kvcolor kv120"></div>
+              <span>120</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=138" value="138" />
+              <label class="kv138"></label>
+              <div class="kvcolor kv138"></div>
+              <span>138</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=161" value="161" />
+              <label class="kv161"></label>
+              <div class="kvcolor kv161"></div>
+              <span>161</span>
+            </div>
+          </div>
+          <div class="kv_right">
+            <div class="kVfilter">
+              <input type="checkbox" rel="=230" value="230" />
+              <label class="kv230"></label>
+              <div class="kvcolor kv230"></div>
+              <span>230</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=345" value="345" />
+              <label class="kv345"></label>
+              <div class="kvcolor kv345"></div>
+              <span>345</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=500" value="500" />
+              <label class="kv500"></label>
+              <div class="kvcolor kv500"></div>
+              <span>500</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel="=765" value="765" />
+              <label class="kv765"></label>
+              <div class="kvcolor kv765"></div>
+              <span>765</span>
+            </div>
+            <div class="kVfilter">
+              <input type="checkbox" rel=">999" value="1000" />
+              <label class="kv1000"></label>
+              <div class="kvcolor kv1000"></div>
+              <span>HVDC</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- kVfilter -->
+    <!--measure-->
+    <div id="menu-Measurement" class="measure-tool-container autocloseitem" style="display: none; z-index:20001;"
+      title="Measure">
+      <div id="measurementDiv"></div>
+      <span style="font-size:smaller;padding:5px 5px;display: block;border-top:thin solid rgb(51,51,51);">
+        To
+        measure:
+      </span>
+      <span style="font-size:smaller;padding:5px 5px;display: block;">1. Select start location on a map</span>
+      <span style="font-size:smaller;padding:5px 5px;display: block;">
+        2. Double click to end and see final
+        distance
+      </span>
+      <span style="font-size:smaller;padding:5px 5px;display: block;">
+        3. Select the dropdown to change unit
+      </span>
+    </div>
+
+    <!--measure-->
+    <!--basemaps-->
+    <div class="menu-content off shadowed autocloseitem" id="menu-Basemaps" title="Base Maps">
+      <div class="menu-scroll scrolls">
+        <div id="thumbPickerDiv" style="cursor: pointer;">
+          <div class="thumbOuter ThumbnailPicker thumbVert" style="cursor: pointer; text-align: center; height: 500px;">
+            <div class="thumbScroller" style="height: 398px;">
+              <div class="thumbWrapper thumbClickable thumbVert" style="height: 95px;">
+                <div id="img_thumbPickerDiv_0" class="basemap Thumbnail" var="default">
+                  <img class="imageGalleryThumb" src="static/basemap/default.png" title="Default" />
+                </div>
+                <div id="img_thumbPickerDiv_1" class="basemap Thumbnail" var="imagery">
+                  <img class="imageGalleryThumb" src="static/basemap/tempimagery.jpg" title="Imagery" />
+                </div>
+                <div id="img_thumbPickerDiv_3" class="basemap Thumbnail" var="streets">
+                  <img class="imageGalleryThumb" src="static/basemap/tempstreets.jpg" title="Streets" />
+                </div>
+                <div id="img_thumbPickerDiv_4" class="basemap Thumbnail" var="topo">
+                  <img class="imageGalleryThumb" src="static/basemap/topo_map_2.jpg" title="Topographic" />
+                </div>
+                <div id="img_thumbPickerDiv_6" class="basemap Thumbnail" var="lightgraycanvas">
+                  <img class="imageGalleryThumb" src="static/basemap/templight_gray_canvas_with_labels__ne_usa.png"
+                    title="Light gray canvas" />
+                </div>
+                <div id="img_thumbPickerDiv_7" class="basemap Thumbnail" var="natgeo">
+                  <img class="imageGalleryThumb" src="static/basemap/natgeo.jpg" title="National Geographic" />
+                </div>
+                <div id="img_thumbPickerDiv_8" class="basemap Thumbnail" var="oceans">
+                  <img class="imageGalleryThumb" src="static/basemap/tempoceans.jpg" title="Oceans" />
+                </div>
+                <div id="img_thumbPickerDiv_9" class="basemap Thumbnail" var="openstreetmap">
+                  <img class="imageGalleryThumb" src="static/basemap/temposm.jpg" title="OpenStreetMap" />
+                </div>
+                <div id="img_thumbPickerDiv_10" class="basemap Thumbnail" var="popdensity">
+                  <img class="imageGalleryThumb" src="static/basemap/popdensity.png" title="Population density" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!--basemaps-->
+    <!-- draw -->
+    <div id="menu-Draw" style="display: none;" class="autocloseitem" title="Drawing">
+      <div class="draw_container">
+        <div class="draw_head"></div>
+        <div class="draw_nav">
+          <div class="drawControl">
+            <div id="draw_select" type="SELECT" title="Edit & Move" class=""></div>
+            <div id="draw_point" type="POINT" title="Point" class="drawtypebutton"></div>
+            <div id="draw_polyline" type="POLYLINE" title="Polyline" class="drawtypebutton"></div>
+            <div id="draw_freehand_polyline" type="FREEHAND_POLYLINE" title="Freehand Polyline" class="drawtypebutton">
+            </div>
+            <div id="draw_rectangle" type="RECTANGLE" title="Rectangle" class="drawtypebutton"></div>
+            <div id="draw_circle" type="CIRCLE" title="Circle" class="drawtypebutton"></div>
+            <div id="draw_polygon" type="POLYGON" title="Polygon" class="drawtypebutton"></div>
+            <div id="draw_freehand_polygon" type="FREEHAND_POLYGON" title="Freehand Polygon" class="drawtypebutton">
+            </div>
+            <div id="draw_text" type="TEXT" title="Text" class="drawtypebutton"></div>
+
+          </div>
+        </div>
+        <div class="draw_main">
+          <!--point page-->
+          <div id="draw_point_page" class="draw_page" style="display: none;">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Style</td>
+                  <td>
+                    <div>
+                      <select id="point-style">
+                        <option value="STYLE_CIRCLE" selected="selected">Circle</option>
+                        <option value="STYLE_CROSS">Cross</option>
+                        <option value="STYLE_DIAMOND">Diamond</option>
+                        <option value="STYLE_SQUARE">Square</option>
+                        <option value="STYLE_X">X</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Size</td>
+                  <td>
+                    <div>
+                      <input id="point-size" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Outline width</td>
+                  <td>
+                    <div>
+                      <input id="point-width" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transparency</td>
+                  <td>
+                    <div>
+                      <input id="point-transparency" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fill color</td>
+                  <td>
+                    <div>
+                      <div id="point-fillselector" class="colorselector">
+                        <div></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Outline color</td>
+                  <td>
+                    <div>
+                      <div id="point-outlineselector" class="colorselector">
+                        <div></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <!--point page-->
+          <!--line page-->
+          <div id="draw_line_page" class="draw_page" style="display: none;">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Style</td>
+                  <td>
+                    <div>
+                      <select id="line-style">
+                        <option value="STYLE_SOLID">Solid</option>
+                        <option value="STYLE_DASH">Dash</option>
+                        <option value="STYLE_DOT">Dot</option>
+                        <option value="STYLE_DASHDOT">Dash dot</option>
+                        <option value="STYLE_DASHDOTDOT">Dash dot dot</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Width</td>
+                  <td>
+                    <div>
+                      <input id="line-width" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transparency</td>
+                  <td>
+                    <div>
+                      <input id="line-transparency" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Line color</td>
+                  <td>
+                    <div>
+                      <div id="line-colorselector" class="colorselector">
+                        <div></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--line page-->
+          <!--poly page-->
+          <div id="draw_poly_page" class="draw_page" style="display: none;">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Style</td>
+                  <td>
+                    <div>
+                      <select id="fill-style">
+                        <option value="STYLE_SOLID">Solid</option>
+                        <option value="STYLE_CROSS">Cross</option>
+                        <option value="STYLE_DIAGONAL_CROSS">Diagonal cross</option>
+                        <option value="STYLE_FORWARD_DIAGONAL">Forward diagonal</option>
+                        <option value="STYLE_BACKWARD_DIAGONAL">Backward diagonal</option>
+                        <option value="STYLE_HORIZONTAL">Horizontal</option>
+                        <option value="STYLE_VERTICAL">Vertical</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Outline width</td>
+                  <td>
+                    <div>
+                      <input id="fill-width" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transparency</td>
+                  <td>
+                    <div>
+                      <input id="fill-transparency" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Fill color</td>
+                  <td>
+                    <div>
+                      <div id="fill-fillselector" class="colorselector">
+                        <div></div>
+                      </div>
+
+                      <span style="padding-bottom: 20px; position: relative; top: -10px; right: -54px;">
+                        <input type="checkbox" id="fill-denyselector" class="filldenyselector"
+                          style="margin: 0px; padding: 0px; width: 25px; vertical-align: bottom;" />
+                        <label>No Fill</label>
+                      </span>
+
+
+                    </div>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>Outline color</td>
+                  <td>
+                    <div>
+                      <div id="fill-outlineselector" class="colorselector">
+                        <div></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <!--poly page-->
+          <!--text page-->
+          <div id="draw_text_page" class="draw_page" style="display: none;">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Style</td>
+                  <td>
+                    <div>
+                      <select id="text-style">
+                        <option value="STYLE_NORMAL">Normal</option>
+                        <option value="STYLE_ITALIC">Italic</option>
+                        <option value="STYLE_OBLIQUE">Oblique</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Weight</td>
+                  <td>
+                    <div>
+                      <select id="text-weight">
+                        <option value="WEIGHT_NORMAL">Normal</option>
+                        <option value="WEIGHT_BOLD">Bold</option>
+                        <option value="WEIGHT_BOLDER">Bolder</option>
+                        <option value="WEIGHT_LIGHTER">Lighter</option>
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Transparency</td>
+                  <td>
+                    <div>
+                      <input id="text-transparency" />
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Color</td>
+                  <td>
+                    <div>
+                      <div id="text-colorselector" class="colorselector">
+                        <div></div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--text page-->
+        </div>
+      </div>
+      <div class="draw_measure"></div>
+      <div class="draw_foot">
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>
+                <div id="draw_clear_btn" class="draw_btn" var="clear" title="Clear all drawings and&#013;undo history">
+                  Clear
+                </div>
+              </td>
+              <td>
+                <div id="draw_moveup_btn" class="draw_btn" var="moveup"
+                  title="Move the selected object&#013;in front of other drawing objects">
+                  Front
+                </div>
+              </td>
+              <td>
+                <div id="draw_movedown_btn" class="draw_btn" var="movedown"
+                  title="Move the selected object&#013;behind other drawing objects">
+                  Back
+                </div>
+              </td>
+              <td>
+                <div id="draw_undo_btn" class="draw_btn" var="undo"
+                  title="Undo the selected drawing object or&#013;the last drawing object">
+                  Undo
+                </div>
+              </td>
+              <td>
+                <div id="draw_redo_btn" class="draw_btn" var="redo" title="Redo the last drawing object">
+                  Redo
+                </div>
+              </td>
+              <td>
+                <div id="draw_delete_btn" class="draw_btn" var="delete" title="Delete the selected&#013;drawing object">
+                  Delete
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- draw -->
+    <!-- queue -->
+    <div id="menu-QueueFilter" style="display: none;" class="autocloseitem" title="Queue Filter">
+      <div class="qf_container">
+        <div class="qf_nav">
+          <ul>
+            <li id="qf_btn_symbol">
+              <div class="qf_nav_btn on">></div>
+              <div><label class="qf_nav_lbl_head">Symbol Type</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">Location</label></div>
+            </li>
+            <li id="qf_btn_queues">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">Queues</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="qf_btn_fueltype">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">Fuel Type</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">Multiple</label></div>
+            </li>
+            <li id="qf_btn_status">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">Status</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="qf_btn_zones">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">Zones</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="qf_btn_states">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">States</label></div>
+              <div class="qf_nav_lbl_status"><label class="qf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="qf_btn_mw">
+              <div class="qf_nav_btn">></div>
+              <div><label class="qf_nav_lbl_head">Megawatt</label></div>
+              <div class="qf_nav_lbl_status">
+                <label class="qf_nav_lbl_status qfmwonoffstatus">Off</label>
+                <label class="qf_nav_lbl_status qfmwminmaxval">50 to 3,500 MW</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="qf_main">
+          <div id="qf_symbol" class="qf_page">
+            <label class="qf_page_head">Symbol Type</label>
+            <label class="">Visualize queues by:</label>
+            <div id="qf_visualizequeuesby">
+              <div class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_ft" name="queuesymbolize" value="fueltype" checked="checked" />
+                <label for="q_symby_ft"></label>
+                <div class="custradiobtnlbl">Fuel type</div>
+              </div>
+              <div class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_loc" name="queuesymbolize" value="location" />
+                <label for="q_symby_loc"></label>
+                <div class="custradiobtnlbl">Location</div>
+              </div>
+              <div class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_qs" name="queuesymbolize" value="status" />
+                <label for="q_symby_qs"></label>
+                <div class="custradiobtnlbl">Queue status</div>
+              </div>
+              <div class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_mw" name="queuesymbolize" value="mw" />
+                <label for="q_symby_mw"></label>
+                <div class="custradiobtnlbl">Megawatt</div>
+              </div>
+              <div class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_mtx" name="queuesymbolize" value="mtx" />
+                <label for="q_symby_mtx"></label>
+                <div class="custradiobtnlbl">Merchant transmission project</div>
+              </div>
+              <div style="display: none;" class="custradiobtn queuesymbolize">
+                <input type="radio" id="q_symby_upg" name="queuesymbolize" value="upg" />
+                <label for="q_symby_upg"></label>
+                <div class="custradiobtnlbl">Upgrade Request</div>
+              </div>
+
+            </div>
+            <div style="margin: 50px 0 0 15px;">
+              <div><input id="queuelabels2" type="checkbox" /><label>Show queue labels</label></div>
+            </div>
+          </div>
+          <div id="qf_queues" class="qf_page" style="display: none;">
+            <label class="qf_page_head">Queues</label>
+            <div style="height: 64px;">
+              <input id="queuestofilter" type="text" name="queuestofilter" value="" />
+              <div id="queuestofilter_btn" class="qf_blue_btn">Show</div>
+              <label for="queuestofilter" class="examplequeuesearch_lbl">Example: AB-160 or AB</label>
+              <label for="queuestofilter" class="noqueuefound_lbl" style="display: none;">
+                Queue not
+                found
+              </label>
+            </div>
+            <div class="qf_filtered_container">
+              <label class="qf_filtered_list_head">Queues shown limited to:</label>
+              <div id="queuestofilter_clear_btn" class="qf_blue_btn">Clear List</div>
+              <div id="qf_filtered_list">
+                <!--<div class="bookmarklist_item" gid="214"><label class="searchedqueue" gid="214">X</label><label>blank</label></div>-->
+              </div>
+            </div>
+          </div>
+          <div id="qf_fueltype" class="qf_page" style="display: none;">
+            <label class="qf_page_head">Fuel Type</label>
+            <div class="queueall">
+              <input id="qf_fueltypeall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="qf_fueltype_list" class="queuepicker scrolls">
+              <div><input type="checkbox" var="2" value="Biomass" /><label>Biomass</label></div>
+              <div><input type="checkbox" var="3" value="Coal" /><label>Coal</label></div>
+              <div><input type="checkbox" var="4" value="Diesel" /><label>Diesel</label></div>
+              <div><input type="checkbox" var="5" value="Hydro" /><label>Hydro</label></div>
+              <div><input type="checkbox" var="6" value="Methane" /><label>Methane</label></div>
+              <div><input type="checkbox" var="7" value="Natural Gas" /><label>Natural Gas</label></div>
+              <div><input type="checkbox" var="8" value="Nuclear" /><label>Nuclear</label></div>
+              <div>
+                <input type="checkbox" var="10" value="Offshore Wind" /><label>Offshore Wind</label>
+              </div>
+              <div><input type="checkbox" var="9" value="Oil" /><label>Oil</label></div>
+              <div><input type="checkbox" var="15" value="Other" /><label>Other</label></div>
+              <div><input type="checkbox" var="11" value="Solar" /><label>Solar</label></div>
+              <div><input type="checkbox" var="12" value="Storage" /><label>Storage</label></div>
+              <div><input type="checkbox" var="13" value="Wind" /><label>Wind</label></div>
+              <div><input type="checkbox" var="14" value="Wood" /><label>Wood</label></div>
+            </div>
+          </div>
+          <div id="qf_status" class="qf_page" style="display: none;">
+            <label class="qf_page_head">Status</label>
+            <div class="queueall">
+              <input id="qf_statusall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="qf_status_list" class="queuepicker scrolls">
+              <!-- list populated in queue.js -->
+            </div>
+          </div>
+          <div id="qf_zones" class="qf_page" style="display: none;">
+            <label class="qf_page_head">Zones</label>
+            <div class="queueall">
+              <input id="qf_zonesall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="qf_zones_list" class="zonesselect scrolls">
+              <div><input type="checkbox" value="AEC" /><label>AEC</label></div>
+              <div><input type="checkbox" value="AEP" /><label>AEP</label></div>
+              <div><input type="checkbox" value="APS" /><label>APS</label></div>
+              <div><input type="checkbox" value="ATSI" /><label>ATSI</label></div>
+              <div><input type="checkbox" value="BGE" /><label>BGE</label></div>
+              <div><input type="checkbox" value="COMED" /><label>ComEd</label></div>
+              <div><input type="checkbox" value="DAYTON" /><label>Dayton</label></div>
+              <div><input type="checkbox" value="DEOK" /><label>DEOK</label></div>
+              <div><input type="checkbox" value="DL" /><label>DL</label></div>
+              <div><input type="checkbox" value="DOMINION" /><label>Dominion</label></div>
+              <div><input type="checkbox" value="DPL" /><label>DPL</label></div>
+              <div><input type="checkbox" value="EKPC" /><label>EKPC</label></div>
+              <div><input type="checkbox" value="JCPL" /><label>JCPL</label></div>
+              <div><input type="checkbox" value="ME" /><label>ME</label></div>
+              <div><input type="checkbox" value="OVEC HQ" /><label>OVEC</label></div>
+              <div><input type="checkbox" value="PECO" /><label>PECO</label></div>
+              <div><input type="checkbox" value="PENELEC" /><label>PENELEC</label></div>
+              <div><input type="checkbox" value="PEPCO" /><label>PEPCO</label></div>
+              <div><input type="checkbox" value="PPL" /><label>PPL</label></div>
+              <div><input type="checkbox" value="PSEG" /><label>PSEG</label></div>
+              <div><input type="checkbox" value="RE" /><label>RE</label></div>
+            </div>
+          </div>
+          <div id="qf_states" class="qf_page" style="display: none;">
+            <label class="qf_page_head">States</label>
+            <div class="queueall">
+              <input id="qf_statessall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="qf_states_list" class="stateselect scrolls">
+              <div class="states">
+                <input type="checkbox" value="DC" /><label>District of Columbia</label>
+              </div>
+              <div class="states"><input type="checkbox" value="DE" /><label>Delaware</label></div>
+              <div class="states"><input type="checkbox" value="IL" /><label>Illinois</label></div>
+              <div class="states"><input type="checkbox" value="IN" /><label>Indiana</label></div>
+              <div class="states"><input type="checkbox" value="KY" /><label>Kentucky</label></div>
+              <div class="states"><input type="checkbox" value="MD" /><label>Maryland</label></div>
+              <div class="states"><input type="checkbox" value="MI" /><label>Michigan</label></div>
+              <div class="states"><input type="checkbox" value="NC" /><label>North Carolina</label></div>
+              <div class="states"><input type="checkbox" value="NJ" /><label>New Jersey</label></div>
+              <div class="states"><input type="checkbox" value="OH" /><label>Ohio</label></div>
+              <div class="states"><input type="checkbox" value="PA" /><label>Pennsylvania</label></div>
+              <div class="states"><input type="checkbox" value="TN" /><label>Tennessee</label></div>
+              <div class="states"><input type="checkbox" value="VA" /><label>Virginia</label></div>
+              <div class="states"><input type="checkbox" value="WV" /><label>West Virginia</label></div>
+            </div>
+          </div>
+          <div id="qf_mw" class="qf_page" style="display: none;">
+            <label class="qf_page_head">Megawatt</label>
+
+            <div>
+              <input type="checkbox" id="usemegawatts" />
+              <label>Limit results to a range of megawatts</label><br />
+            </div>
+            <div class="mwslidercontainer">
+              <table>
+                <tr>
+                  <td>
+                    <div class="qf_mw_val"><label class="megawattsrange">0</label></div>
+                  </td>
+                  <td width="100%">
+                    <div id="megawatts-range"></div>
+                  </td>
+                  <td>
+                    <div class="qf_mw_val"><label class="megawattsrange">3,500</label></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="qf_foot">
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>
+                <div id="qf_lasso_btn" class="grey_btn" var="lasso" title="queue">Lasso</div>
+                <div id="qf_rto_btn" class="grey_btn2" var="rto">Apply</div>
+              </td>
+              <td>
+                <span style="position: relative; top: 3px; left: 20px;">
+                  <input id="qf_tally_btn" type="checkbox" /><label style="position: relative; top: -2px;"
+                    for="qf_tally_btn">Show MW Totals</label>
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <div id="qf_reset_btn" class="grey_btn" title="Reset filters">Reset</div>
+                <div id="qf_clear_btn" class="grey_btn2">Clear</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+    <div id="dialog-megawattsbyfueltype" title="MW Totals by Fuel Type" style="display: none;">
+      <div class="mwprintbutton" style="float: right; cursor: pointer;">
+        <a id="dlink" style="display:none;"></a>
+        <a class="thebuttontodltoexcel">Excel</a>
+        <label> | </label>
+        <a class="thebuttontoprint">Print</a>
+      </div>
+      <div id="mwprint" style="clear: both;">
+        <div style="margin: 15px 0 10px 0; padding: 10px; font-size: larger;">
+          <label style="float: left;">Fuel Type</label>
+          <label style="float: right;">MW Selected</label>
+        </div>
+        <table id="mwbyfueltype" class="">
+          <tbody>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/biomass.svg" alt="" /><label>Biomass</label>
+              </td>
+              <td>
+                <label id="mwt_biomass" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/coal.svg" alt="" /><label>Coal</label>
+              </td>
+              <td>
+                <label id="mwt_coal" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/diesel.svg" alt="" /><label>Diesel</label>
+              </td>
+              <td>
+                <label id="mwt_diesel" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/hydro.svg" alt="" /><label>Hydro</label>
+              </td>
+              <td>
+                <label id="mwt_hydro" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/methane.svg" alt="" /><label>Methane</label>
+              </td>
+              <td>
+                <label id="mwt_methane" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/naturalgas.svg" alt="" /><label>Natural Gas</label>
+              </td>
+              <td>
+                <label id="mwt_naturalgas" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/nuclear.svg" alt="" /><label>Nuclear</label>
+              </td>
+              <td>
+                <label id="mwt_nuclear" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/offshorewind.svg" alt="" /><label>Offshore Wind</label>
+              </td>
+              <td>
+                <label id="mwt_offshorewind" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/oil.svg" alt="" /><label>Oil</label>
+              </td>
+              <td>
+                <label id="mwt_oil" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/other.svg" alt="" /><label>Other</label>
+              </td>
+              <td>
+                <label id="mwt_other" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/storage.svg" alt="" /><label>Storage</label>
+              </td>
+              <td>
+                <label id="mwt_storage" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/solar.svg" alt="" /><label>Solar</label>
+              </td>
+              <td>
+                <label id="mwt_solar" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+
+              <td class="movethelabel">
+                <img src="static/fueltypes/wind.svg" alt="" /><label>Wind</label>
+              </td>
+              <td>
+                <label id="mwt_wind" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td class="movethelabel">
+                <img src="static/fueltypes/wood.svg" alt="" /><label>Wood</label>
+              </td>
+              <td>
+                <label id="mwt_wood" class="mwtotal">0</label>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+              <td>
+                <label style="padding-right: 25px;">Total</label>
+              </td>
+              <td>
+                <label id="mwt_total" class="mwtotal">0</label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="excelmwout" style="display: none;"></div>
+        <iframe id="iframeforIExlsOut" style="width:0px;height:0px;"></iframe>
+      </div>
+
+    </div>
+    <!-- queue -->
+    <!-- generator -->
+    <div id="menu-GeneratorFilter" style="display: none;" class="autocloseitem" title="Generator Deactivations">
+      <div class="gf_container">
+        <div class="gf_nav">
+          <ul>
+            <li id="gf_btn_symbol">
+              <div class="gf_nav_btn on">></div>
+              <div><label class="gf_nav_lbl_head">Symbol Type</label></div>
+              <div class="gf_nav_lbl_status"><label class="gf_nav_lbl_status">data driven</label></div>
+            </li>
+            <li id="gf_btn_generators">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">Date Range</label></div>
+              <div class="gf_nav_lbl_status"><label class="gf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="gf_btn_fueltype">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">Fuel Type</label></div>
+              <div class="gf_nav_lbl_status"><label class="gf_nav_lbl_status">Multiple</label></div>
+            </li>
+            <li id="gf_btn_status">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">Status</label></div>
+              <div><label class="gf_nav_lbl_status"></label></div>
+            </li>
+            <li id="gf_btn_zones">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">Zones</label></div>
+              <div class="gf_nav_lbl_status"><label class="gf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="gf_btn_states">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">States</label></div>
+              <div class="gf_nav_lbl_status"><label class="gf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="gf_btn_mw">
+              <div class="gf_nav_btn">></div>
+              <div><label class="gf_nav_lbl_head">Megawatt</label></div>
+              <div class="gf_nav_lbl_status">
+                <label class="gf_nav_lbl_status gfmwonoffstatus">Off</label>
+                <label class="gf_nav_lbl_status gfmwminmaxval">50 to 2,500 MW</label>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="gf_main">
+          <div id="gf_symbol" class="gf_page">
+            <label class="gf_page_head">Symbol Type</label>
+            <label class="">Visualize generators by:</label>
+            <div id="gf_visualizegeneratorsby">
+              <div class="custradiobtn generatorsymbolize">
+                <input type="radio" id="gf_symby_loc" name="generatorsymbolize" value="location" checked="checked" />
+                <label for="gf_symby_loc"></label>
+                <div class="custradiobtnlbl">Location</div>
+              </div>
+              <div class="custradiobtn generatorsymbolize">
+                <input type="radio" id="g_symby_mw" name="generatorsymbolize" value="mw" />
+                <label for="g_symby_mw"></label>
+                <div class="custradiobtnlbl">Megawatt</div>
+              </div>
+            </div>
+          </div>
+          <div id="gf_generators" class="gf_page" style="display: none;">
+            <label class="gf_page_head">Date Range</label>
+            <div style="height: 64px;">
+              <table class="gf_daterange">
+                <tbody>
+                  <tr>
+                    <td>From</td>
+                    <td>
+                      <input id="generatorstofilter_FromDate" type="text" name="generatorstofilter" value="" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>To</td>
+                    <td>
+                      <input id="generatorstofilter_ToDate" type="text" name="generatorstofilter" value="" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="gf_fueltype" class="gf_page" style="display: none;">
+            <label class="gf_page_head">Fuel Type</label>
+            <div class="generatorall">
+              <input id="gf_fueltypeall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="gf_fueltype_list" class="generatorpicker scrolls">
+              <div><input type="checkbox" var="2" value="Biomass" /><label>Biomass</label></div>
+              <div><input type="checkbox" var="3" value="Coal" /><label>Coal</label></div>
+              <div><input type="checkbox" var="4" value="Diesel" /><label>Diesel</label></div>
+              <div><input type="checkbox" var="5" value="Hydro" /><label>Hydro</label></div>
+              <div><input type="checkbox" var="6" value="Methane" /><label>Methane</label></div>
+              <div><input type="checkbox" var="7" value="Natural Gas" /><label>Natural Gas</label></div>
+              <div><input type="checkbox" var="8" value="Nuclear" /><label>Nuclear</label></div>
+              <div>
+                <input type="checkbox" var="10" value="Offshore Wind" /><label>Offshore Wind</label>
+              </div>
+              <div><input type="checkbox" var="9" value="Oil" /><label>Oil</label></div>
+              <div><input type="checkbox" var="15" value="Other" /><label>Other</label></div>
+              <div><input type="checkbox" var="11" value="Solar" /><label>Solar</label></div>
+              <div><input type="checkbox" var="12" value="Storage" /><label>Storage</label></div>
+              <div><input type="checkbox" var="13" value="Wind" /><label>Wind</label></div>
+              <div><input type="checkbox" var="14" value="Wood" /><label>Wood</label></div>
+            </div>
+          </div>
+          <div id="gf_status" class="gf_page" style="display: none;">
+            <label class="gf_page_head">Status</label>
+            <div class="gf_filtered_container" style="display: block;">
+              <div class="custradiobtn">
+                <input id="gf_status_gendeactby_pending" type="radio" name="gendeactivationby" value="pending" />
+                <label for="gf_status_gendeactby_pending"></label>
+                <div class="custradiobtnlbl">Future</div>
+              </div>
+              <div class="custradiobtn">
+                <input id="gf_status_gendeactby_deactivated" type="radio" name="gendeactivationby"
+                  value="deactivated" />
+                <label for="gf_status_gendeactby_deactivated"></label>
+                <div class="custradiobtnlbl">Deactivated</div>
+              </div>
+              <div class="custradiobtn">
+                <input id="gf_status_gendeactby_withdrawn" type="radio" name="gendeactivationby" value="withdrawn" />
+                <label for="gf_status_gendeactby_withdrawn"></label>
+                <div class="custradiobtnlbl">Withdrawn</div>
+              </div>
+              <div class="custradiobtn">
+                <input id="gf_status_gendeactby_all" type="radio" name="gendeactivationby" value="all"
+                  checked="checked" />
+                <label for="gf_status_gendeactby_all"></label>
+                <div class="custradiobtnlbl">All</div>
+              </div>
+            </div>
+          </div>
+          <div id="gf_zones" class="gf_page" style="display: none;">
+            <label class="gf_page_head">Zones</label>
+            <div class="generatorall">
+              <input id="gf_zonesall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="gf_zones_list" class="zonesselect scrolls">
+              <div><input type="checkbox" value="AEC" /><label>AEC</label></div>
+              <div><input type="checkbox" value="AEP" /><label>AEP</label></div>
+              <div><input type="checkbox" value="APS" /><label>APS</label></div>
+              <div><input type="checkbox" value="ATSI" /><label>ATSI</label></div>
+              <div><input type="checkbox" value="BGE" /><label>BGE</label></div>
+              <div><input type="checkbox" value="ComEd" /><label>ComEd</label></div>
+              <div><input type="checkbox" value="Dayton" /><label>Dayton</label></div>
+              <div><input type="checkbox" value="DEOK" /><label>DEOK</label></div>
+              <div><input type="checkbox" value="DL" /><label>DL</label></div>
+              <div><input type="checkbox" value="Dominion" /><label>Dominion</label></div>
+              <div><input type="checkbox" value="DPL" /><label>DPL</label></div>
+              <div><input type="checkbox" value="EKPC" /><label>EKPC</label></div>
+              <div><input type="checkbox" value="JCPL" /><label>JCPL</label></div>
+              <div><input type="checkbox" value="ME" /><label>ME</label></div>
+              <div><input type="checkbox" value="OVEC HQ" /><label>OVEC</label></div>
+              <div><input type="checkbox" value="PECO" /><label>PECO</label></div>
+              <div><input type="checkbox" value="PENELEC" /><label>PENELEC</label></div>
+              <div><input type="checkbox" value="PEPCO" /><label>PEPCO</label></div>
+              <div><input type="checkbox" value="PPL" /><label>PPL</label></div>
+              <div><input type="checkbox" value="PSEG" /><label>PSEG</label></div>
+              <div><input type="checkbox" value="RE" /><label>RE</label></div>
+            </div>
+          </div>
+          <div id="gf_states" class="gf_page" style="display: none;">
+            <label class="gf_page_head">States</label>
+            <div class="generatorall">
+              <input id="gf_statessall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="gf_states_list" class="stateselect scrolls">
+              <div class="states">
+                <input type="checkbox" value="DC" /><label>District of Columbia</label>
+              </div>
+              <div class="states"><input type="checkbox" value="DE" /><label>Delaware</label></div>
+              <div class="states"><input type="checkbox" value="IL" /><label>Illinois</label></div>
+              <div class="states"><input type="checkbox" value="IN" /><label>Indiana</label></div>
+              <div class="states"><input type="checkbox" value="KY" /><label>Kentucky</label></div>
+              <div class="states"><input type="checkbox" value="MD" /><label>Maryland</label></div>
+              <div class="states"><input type="checkbox" value="MI" /><label>Michigan</label></div>
+              <div class="states"><input type="checkbox" value="NC" /><label>North Carolina</label></div>
+              <div class="states"><input type="checkbox" value="NJ" /><label>New Jersey</label></div>
+              <div class="states"><input type="checkbox" value="OH" /><label>Ohio</label></div>
+              <div class="states"><input type="checkbox" value="PA" /><label>Pennsylvania</label></div>
+              <div class="states"><input type="checkbox" value="TN" /><label>Tennessee</label></div>
+              <div class="states"><input type="checkbox" value="VA" /><label>Virginia</label></div>
+              <div class="states"><input type="checkbox" value="WV" /><label>West Virginia</label></div>
+            </div>
+          </div>
+          <div id="gf_mw" class="gf_page" style="display: none;">
+            <label class="gf_page_head">Megawatt</label>
+            <div>
+              <input type="checkbox" id="gen_usemegawatts" />
+              <label>Limit results to a range of megawatts</label><br />
+            </div>
+            <div class="genmwslidercontainer">
+              <table>
+                <tr>
+                  <td>
+                    <div class="gf_mw_val"><label class="megawattsrange">0</label></div>
+                  </td>
+                  <td width="100%">
+                    <div id="gen_megawatts-range"></div>
+                  </td>
+                  <td>
+                    <div class="gf_mw_val"><label class="megawattsrange">1,500</label></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="gf_foot">
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>
+                <div id="gf_lasso_btn" class="grey_btn" var="lasso" title="generators">Lasso</div>
+                <div id="gf_rto_btn" class="grey_btn2" var="rto">Apply</div>
+              </td>
+
+              <td></td>
+              <td style="text-align: right;">
+                <div id="gf_reset_btn" class="grey_btn" title="Reset filters">Reset</div>
+                <div id="gf_clear_btn" class="grey_btn2">Clear</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- generator -->
+    <!-- projects -->
+    <div id="menu-ProjectsFilter" style="display: none;" class="autocloseitem" title="Projects Filter">
+      <div class="pf_container">
+        <div class="pf_nav">
+          <ul>
+            <li id="pf_btn_projecttype">
+              <div class="pf_nav_btn on">></div>
+              <div><label class="pf_nav_lbl_head">Project Type</label></div>
+              <div class="pf_nav_lbl_status"><label class="pf_nav_lbl_status">Baseline</label></div>
+            </li>
+            <li id="pf_btn_transmissionowner">
+              <div class="pf_nav_btn">></div>
+              <div><label class="pf_nav_lbl_head">Transmission Owner</label></div>
+              <div class="pf_nav_lbl_status"><label class="pf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="pf_btn_states">
+              <div class="pf_nav_btn">></div>
+              <div><label class="pf_nav_lbl_head">States</label></div>
+              <div class="pf_nav_lbl_status"><label class="pf_nav_lbl_status">All</label></div>
+            </li>
+            <li id="pf_btn_price">
+              <div class="pf_nav_btn">></div>
+              <div><label class="pf_nav_lbl_head">Price</label></div>
+              <div><label class="pf_nav_lbl_status pfpriceonoff"></label></div>
+              <div><label class="pf_nav_lbl_status pfpriceval"></label></div>
+            </li>
+            <li id="pf_btn_imneed">
+              <div class="pf_nav_btn">></div>
+              <div><label class="pf_nav_lbl_head">Immediate Need</label></div>
+              <div class="pf_nav_lbl_status"><label class="pf_nav_lbl_status">No</label></div>
+            </li>
+          </ul>
+        </div>
+        <div class="pf_main">
+          <div id="pf_type" class="pf_page">
+            <label class="pf_page_head">Project Type</label>
+            <div class="projecttype_all">
+              <input id="pf_type_all" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="pf_type_list" class="pftypeselect scrolls">
+              <div><input type="checkbox" value="Baseline" /><label>Baseline</label></div>
+              <div><input type="checkbox" value="Supplemental" /><label>Supplemental</label></div>
+              <div><input type="checkbox" value="Network" /><label>Network</label></div>
+            </div>
+          </div>
+          <div id="pf_transmissionowner" class="pf_page" style="display: none;">
+            <label class="pf_page_head">Transmission Owner</label>
+            <div class="projectfilterall">
+              <input id="pf_zonesall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="pf_transmissionowner_list" class="zonesselect scrolls">
+              <div><input type="checkbox" value="AEC" /><label>AEC</label></div>
+              <div><input type="checkbox" value="AEP" /><label>AEP</label></div>
+              <div><input type="checkbox" value="APS" /><label>APS</label></div>
+              <div><input type="checkbox" value="ATSI" /><label>ATSI</label></div>
+              <div><input type="checkbox" value="BGE" /><label>BGE</label></div>
+              <div><input type="checkbox" value="ComEd" /><label>ComEd</label></div>
+              <div><input type="checkbox" value="Dayton" /><label>Dayton</label></div>
+              <div><input type="checkbox" value="DEOK" /><label>DEOK</label></div>
+              <div><input type="checkbox" value="DL" /><label>DL</label></div>
+              <div><input type="checkbox" value="Dominion" /><label>Dominion</label></div>
+              <div><input type="checkbox" value="DPL" /><label>DPL</label></div>
+              <div><input type="checkbox" value="EKPC" /><label>EKPC</label></div>
+              <div><input type="checkbox" value="JCPL" /><label>JCPL</label></div>
+              <div><input type="checkbox" value="ME" /><label>ME</label></div>
+              <div><input type="checkbox" value="OVEC HQ" /><label>OVEC</label></div>
+              <div><input type="checkbox" value="PECO" /><label>PECO</label></div>
+              <div><input type="checkbox" value="PENELEC" /><label>PENELEC</label></div>
+              <div><input type="checkbox" value="PEPCO" /><label>PEPCO</label></div>
+              <div><input type="checkbox" value="PPL" /><label>PPL</label></div>
+              <div><input type="checkbox" value="PSEG" /><label>PSEG</label></div>
+              <div><input type="checkbox" value="RE" /><label>RE</label></div>
+            </div>
+          </div>
+          <div id="pf_states" class="pf_page" style="display: none;">
+            <label class="pf_page_head">States</label>
+            <div class="pfstatesall">
+              <input id="pf_statessall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="pf_states_list" class="stateselect scrolls">
+              <div class="states">
+                <input type="checkbox" value="DC" /><label>District of Columbia</label>
+              </div>
+              <div class="states"><input type="checkbox" value="DE" /><label>Delaware</label></div>
+              <div class="states"><input type="checkbox" value="IL" /><label>Illinois</label></div>
+              <div class="states"><input type="checkbox" value="IN" /><label>Indiana</label></div>
+              <div class="states"><input type="checkbox" value="KY" /><label>Kentucky</label></div>
+              <div class="states"><input type="checkbox" value="MD" /><label>Maryland</label></div>
+              <div class="states"><input type="checkbox" value="MI" /><label>Michigan</label></div>
+              <div class="states"><input type="checkbox" value="NC" /><label>North Carolina</label></div>
+              <div class="states"><input type="checkbox" value="NJ" /><label>New Jersey</label></div>
+              <div class="states"><input type="checkbox" value="OH" /><label>Ohio</label></div>
+              <div class="states"><input type="checkbox" value="PA" /><label>Pennsylvania</label></div>
+              <div class="states"><input type="checkbox" value="TN" /><label>Tennessee</label></div>
+              <div class="states"><input type="checkbox" value="VA" /><label>Virginia</label></div>
+              <div class="states"><input type="checkbox" value="WV" /><label>West Virginia</label></div>
+            </div>
+          </div>
+          <div id="pf_price" class="pf_page" style="display: none;">
+            <label class="pf_page_head">Price</label>
+            <div>
+              <input type="checkbox" id="project_price" />
+              <label>Limit results to a range of $ millions.</label><br />
+            </div>
+            <div class="projectpriceslidercontainer">
+              <table>
+                <tr>
+                  <td>
+                    <div class="pf_price_val"><label class="pricerange">0</label></div>
+                  </td>
+                  <td width="100%">
+                    <div id="projectfilter-price-range"></div>
+                  </td>
+                  <td>
+                    <div class="pf_price_val"><label class="pricerange">900</label></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div id="pf_imneed" class="pf_page" style="display: none;">
+            <label class="pf_page_head">Immediate Need</label>
+            <div class="pf_filtered_container" style="display: block;">
+              <div class="custradiobtn imneed">
+                <input id="pf_imneed_yes" type="radio" name="immediateneed" value="yes" />
+                <label for="pf_imneed_yes"></label>
+                <div class="custradiobtnlbl">Yes</div>
+              </div>
+              <div class="custradiobtn imneed">
+                <input id="pf_imneed_no" type="radio" name="immediateneed" value="no" checked="checked" />
+                <label for="pf_imneed_no"></label>
+                <div class="custradiobtnlbl">No</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pf_foot">
+        <table style="width: 100%;">
+          <tbody>
+            <tr>
+              <td>
+                <div id="pf_lasso_btn" class="grey_btn" var="lasso" title="projects">Lasso</div>
+                <div id="pf_rto_btn" class="grey_btn2" var="rto">Apply</div>
+              </td>
+
+              <td></td>
+              <td style="text-align: right;">
+                <div id="pf_reset_btn" class="grey_btn" title="Reset filters">Reset</div>
+                <div id="pf_clear_btn" class="grey_btn2">Clear</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- projects-->
+    <!-- flowgate -->
+    <!-- COMMETN OUT SECTION FOR ESM! -->
+    <div id="menu-Flowgate" style="display: none;" class="autocloseitem" title="Proposal and Flowgate Analysis">
+      <div class="flgt_container" id="flowgate">
+        <div class="flgt_main">
+          <div id="flgt_timeframe" class="flgt_section">
+            <label class="flgt_section_head">Timeframe</label>
+            <div>
+              <ul>
+                <li style="padding-bottom:3px;">
+                  <label>
+                    <input type="radio" name="timeframe" value="proposalwindow" checked />
+                    <span>
+                      <label for="flgt_proposalwindow">
+                        Proposal window
+                        <select id="flgt_proposalwindow">
+                          <option value="">-select-</option>
+                          <option value="all">All</option>
+                          <!--<option value="2018_1">2018_1</option>-->
+                          <!-- populated from data -->
+                        </select>
+                      </label>
+                    </span>
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="radio" name="timeframe" value="calyear" />
+                    <span>
+                      <label for="flgt_calyear">
+                        Calendar year
+                        <select id="flgt_calyear" style="margin-left:23px;">
+                          <option value="">-select-</option>
+                          <option value="all">All</option>
+                          <!--<option value="2018">2018</option>-->
+                          <!-- populated from data -->
+                        </select>
+                      </label>
+                    </span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="flgt_voltage" class="flgt_section">
+            <label class="flgt_section_head" style="margin-top:10px;">Voltage</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_kVall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="flgt_voltage_list">
+              <div class="flgt_CB">
+                <input id="flgt_69kV" type="checkbox" rel="=69" value="69" /><label>69 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_115kV" type="checkbox" rel="=115" value="115" /><label>115 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_138kV" type="checkbox" rel="=138" value="138" /><label>138 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_161kV" type="checkbox" rel="=161" value="161" /><label>161 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_230kV" type="checkbox" rel="=230" value="230" /><label>230 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_345kV" type="checkbox" rel="=345" value="345" /><label>345 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_500kV" type="checkbox" rel="=500" value="500" /><label>500 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_765kV" type="checkbox" rel="=765" value="765" /><label>765 kV</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_DC" type="checkbox" rel="=DC" value="DC" /><label>DC</label>
+              </div>
+            </div>
+          </div>
+
+          <div id="flgtFooter" class="footerContainer">
+            <div class=" spaceBetweenFlex">
+              <div class="leftFlex">
+                <div id="flgt_lasso" class="grey_btn" var="lasso" title="flowgates">Lasso</div>
+                <div id="flgt_rto_btn" class="grey_btn2" var="rto" title="Apply changes">
+                  Apply
+                </div>
+              </div>
+
+              <div class="rightFlex">
+                <div id="flgt_reset_btn" class="grey_btn" title="Reset to defaults">
+                  Reset
+                </div>
+                <div id="flgt_clear_btn" class="grey_btn2" title="Clear all checkboxes">
+                  Clear
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="flgt_proposals">
+          <input id="flgt_proposalsall" type="checkbox" value="Proposals" /><label
+            class="flgt_page_head">Proposals</label>
+          <div id="propIcon"></div>
+          <div id="flgt_proposingentity" class="flgt_section">
+            <label class="flgt_section_head">Proposing entity</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_entityall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div class="flgt_CB flgt_inc">
+              <input id="flgt_entityincumbent" type="checkbox" value="Incumbents" /><label>
+                Incumbents
+                only
+              </label>
+            </div>
+            <div id="flgt_entity_list" class="entityselect scrolls">
+              <!--<div class="flgt_CB"><input type="checkbox" value="AEC" /><label>AEC</label></div>-->
+              <!-- populated from data -->
+            </div>
+          </div>
+          <div id="flgt_serviceyear" class="flgt_section">
+            <label for="flgt_svcyear" class="flgt_section_head" style="margin-top:15px;">
+              In service year
+              <select id="flgt_svcyear">
+                <option value="">-select-</option>
+                <option value="all">All</option>
+                <!-- populated from data -->
+              </select>
+            </label>
+          </div>
+          <div id="flgt_cost" class="flgt_section">
+            <label class="flgt_section_head">Cost</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_costall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="flgt_cost_list">
+              <div class="flgt_CB">
+                <input id="flgt_under2mil" type="checkbox" value="0-2" /><label>Less than $2M</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_twoto20mil" type="checkbox" value="2-20" /><label>$2M to $20M</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_twentyto60mil" type="checkbox" value="20-60" /><label>
+                  $20M to
+                  $60M
+                </label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_sixtyto100mil" type="checkbox" value="60-100" /><label>
+                  $60M to
+                  $100M
+                </label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_over100mil" type="checkbox" value="100+" /><label>
+                  Greater than
+                  $100M
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="flgt_flowgates">
+          <input id="flgt_flowgatesall" type="checkbox" value="Flowgates" /><label
+            class="flgt_page_head">Flowgates</label>
+          <div id="flowIcon"></div>
+          <div id="flgt_analysistype" class="flgt_section">
+            <label class="flgt_section_head">Analysis type</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_typeall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="flgt_type_list" class="typeselect scrolls" style="width:240px;">
+              <!--<div class="flgt_CB"><input type="checkbox" value="" /><label>15 Year Thermal - Single Cont</label></div>-->
+              <!-- populated from data -->
+            </div>
+          </div>
+          <div id="flgt_zones" class="flgt_section">
+            <label class="flgt_section_head" style="margin-top:10px;">Target zone</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_zonesall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="flgt_zones_list" class="zonesselect scrolls">
+              <!--<div class="flgt_CB"><input type="checkbox" value="AEC" /><label>AEC</label></div>-->
+              <!-- populated from data -->
+            </div>
+          </div>
+          <div id="flgt_windowstatus" class="flgt_section">
+            <label class="flgt_section_head" style="margin-top:10px;">Window status</label>
+            <div class="flgt_CB flgt_all">
+              <input id="flgt_statusall" type="checkbox" value="All" /><label>All</label>
+            </div>
+            <div id="flgt_status_list">
+              <div class="flgt_CB">
+                <input id="flgt_statusincluded" type="checkbox" value="IN" /><label>Included</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_statusexcluded" type="checkbox" value="EX" /><label>Excluded</label>
+              </div>
+              <div class="flgt_CB">
+                <input id="flgt_statusinvalid" type="checkbox" value="IV" /><label>Invalid</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- COMMENT OUT SECTION FOR ESM! -->
+    <!-- flowgate -->
+    <!-- gas -->
+    <div id="menu-GasPipeline" style="display: none;" class="autocloseitem" title="Gas Pipeline">
+      <ul class="gasPipelineFilterAll">
+        <li var="0"><label><input type="checkbox" />All</label></li>
+      </ul>
+      <ul class="gasPipelineFilter" style="margin-top: 10px;">
+        <li var="60362"><label><input type="checkbox" />ANR Pipeline Co</label></li>
+        <li var="72394"><label><input type="checkbox" />Columbia Gas Transmission Corp</label></li>
+        <li var="60367"><label><input type="checkbox" />Columbia Gulf Transmission Co</label></li>
+        <li var="72424"><label><input type="checkbox" />Dominion Cove Point LNG LP</label></li>
+        <li var="72395"><label><input type="checkbox" />Dominion Transmission Inc</label></li>
+        <li var="60372"><label><input type="checkbox" />East Tennessee Natural Gas Co</label></li>
+        <li var="72396"><label><input type="checkbox" />Eastern Shore Natural Gas Co</label></li>
+        <li var="60370"><label><input type="checkbox" />National Fuel Gas Supply Corp</label></li>
+        <li var="60360"><label><input type="checkbox" />Natural Gas Pipeline Co of America</label></li>
+        <li var="60379"><label><input type="checkbox" />Northern Border Pipeline Co</label></li>
+        <li var="72398"><label><input type="checkbox" />Panhandle Eastern Pipe Line Co</label></li>
+        <li var="1130614"><label><input type="checkbox" />PPL Corp</label></li>
+        <li var="1128464"><label><input type="checkbox" />Spectra Energy Partners LP</label></li>
+        <li var="60353"><label><input type="checkbox" />Tennessee Gas Pipeline Co</label></li>
+        <li var="60373"><label><input type="checkbox" />Texas Eastern Transmission LP</label></li>
+        <li var="60395"><label><input type="checkbox" />Texas Gas Transmission LLC</label></li>
+        <li var="60374"><label><input type="checkbox" />Transcontinental Gas Pipe Line Corp</label></li>
+      </ul>
+
+    </div>
+    <!-- gas -->
+    <!-- legend -->
+    <div id="menu-Legend" style="display: none;" class="autocloseitem" title="Legend">
+      <div class="menu-scroll scrolls" id="Legend_containter">
+        <div class="lgnd_container">
+          <div class="lgnd_left">
+            <label style="font-size: 15px;">General</label>
+            <table id="legend-Components" style="margin: 10px 0 0 0;"></table>
+          </div>
+          <div class="lgnd_center">
+            <div style="margin: 0 0 0 10px;">
+              <label style="font-size: 15px; padding: 0 0 0 10px;">Fuel Type</label>
+              <div id="legend-Queues">
+                <div id="legendRootQueue">
+                  <div class="lgnd FT" style="display: none;">
+                    <label style="display: none;">Fuel Types</label>
+                    <ul id="menulegendmenu" class="lgnd FT" style="width: 150px; margin: 10px 0 0 0;"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lgnd_right">
+            <div style="margin: 0 0 0 10px;">
+              <label style="font-size: 15px; padding: 0 0 0 10px;">Queue Status</label>
+              <table class="lgnd_queuestatus">
+                <tbody>
+                  <!-- queue.js lists all status in legend -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- legend -->
+    <!-- substations -->
+    <div id="menu-genReacFilter" class="autocloseitem" title="Substations" style="display: none;">
+      <!--<div id="scenarioFilters">
+                <label for="select" class="custom-select">
+                    Scenario
+                    <select name="select">
+                        <option value="" disabled selected>-- select --</option>
+                        <option value="pclv">Post Contingency Low Voltage</option>
+                        <option value="hv">High Voltage</option>
+                        <option value="mg">Max Generation</option>
+                    </select>
+                </label>
+            </div>-->
+      <div id="treeCheck">
+        <div id="tree"> </div>
+        <div id="status"></div>
+      </div>
+    </div>
+    <!-- substations -->
+
+    <!-- synchrophasors-->
+    <div id="menu-pmu" style="display: none;" class="autocloseitem" title="Synchrophasors">
+      <ul class="pmu">
+        <li var="pmu">
+          <!--<label><input type="checkbox" />PMUs</label>-->
+          <div class='checkboxSmall'>
+            <input type='checkbox' id='pmu'>
+            <label for='pmu'>PMUs</label>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- pmuAlert-->
+    <div id="pmuAlert" title="Warning" style="display: none;"></div>
+    <!-- synchrophasors-->
+
+    <!-- dialogs  -->
+  </div>
+
+</body>
+
+<script type="text/javascript">
+  const deployEnv = deployInfo.deployType.toLowerCase();
+  const apiRoot = {
+    igis: 'https://web-who.integralgis.local/',
+    azure: 'https://web-who.westus.cloudapp.azure.com/',
+    demo: 'https://apps.integralgis.com/pjm/',
+    dev: 'https://gis12wwd.dtcorp.pjm.com/',
+    test: 'https://gis.test.pjm.com/',
+    stage: 'https://gis.ac1stage.pjm.com/',
+    prod: 'https://gis.ac1prod.pjm.com/',
+    esm: 'https://gis.pjm.com/',
+    esmniet: 'https://apps-stage.integralgis.com/'
+  }
+  deployInfo.apiRoot = apiRoot[deployEnv];
+  const isESM = deployEnv.includes('esm') || location.href.includes('?load=esm')
+  const dojoConfig = {
+    baseUrl: "./",
+    async: true,
+    parseOnLoad: false,
+    packages: [
+      { name: "esri", location: deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/esri" },
+      { name: "dojo", location: deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/dojo" },
+      { name: "dojox", location: deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/dojox" },
+      { name: "dijit", location: deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/dijit" },
+      { name: "components", location: deployInfo.verPath + "components" },
+      { name: "common", location: deployInfo.verPath + "common" }
+    ],
+    paths: {
+      handlebars: ["static/api/handlebars/handlebars"],
+      typeahead: ["static/api/typeahead/typeahead.bundle.min"],
+      jqueryui: [deployInfo.apiRoot + "arcgis_js_api/library/jquery/jquery-ui-1.10.3"],
+      jquery: [deployInfo.apiRoot + "arcgis_js_api/library/jquery/jquery-2.0.3.min"]
+    },
+    shim: {
+      handlebars: {
+        exports: "Handlebars"
+      },
+      jquery: {
+        exports: "jQuery"
+      },
+      jqueryui: {
+        reqs: ["jquery"]
+      },
+      typeahead: {
+        reqs: ["jquery", "handlebars", "bloodhound"]
+      }
+    }
+  };
+
+  addApiIncludes();
+  if (isESM) {
+    document.getElementById("flowgate-navmenu").remove();
+    document.getElementById("projects-navmenu").remove();
+    document.getElementById("lasso-navmenu").remove();
+    document.getElementById("substation-navmenu").remove();
+    document.getElementById("gasPipeline-navmenu").remove();
+  };
+
+  function addCss(path) {
+    var head = document.getElementsByTagName("head")[0];
+    var css = document.createElement("link");
+    css.type = "text/css";
+    css.rel = "stylesheet";
+    css.media = "media='screen, projection'";
+    css.href = path;
+    css.media = "screen";
+    head.appendChild(css);
+  };
+  function addJs(path) {
+    var head = document.getElementsByTagName("head")[0];
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.defer = false;
+    script.src = path;
+    head.appendChild(script);
+  };
+  function removeInclude(path, type) {
+    switch (type.toLowerCase()) {
+      case "js":
+        var targetElement = "script";
+        var targetAttr = "scr";
+        break;
+      default:
+        var targetElement = "link";
+        var targetAttr = "href";
+        break;
+    }
+    var allCtrl = document.getElementsByTagName(targetElement);
+    for (var i = allCtrl.length - 1; i >= 0; i--) {
+      if (allCtrl[i] && allCtrl[i].getAttribute(targetAttr) != null && allCtrl[i].getAttribute(targetAttr).indexOf(path) != -1) {
+        allCtrl[i].parentNode.removeChild(allCtrl[i]);
+      }
+    }
+  };
+
+  function addApiIncludes() {
+    addCss(deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/esri/css/esri.css");
+    addJs(deployInfo.apiRoot + "arcgis_js_api/library/3.15igis/3.15/init.js");
+  };
+
+  function loader() {
+    // wait until require is loadded.
+    if ("undefined" === typeof (require)) {
+      setTimeout(function () {
+        loader();
+      }, 500);
+      return false;
+    }
+
+    require(["jquery"], function () {
+      // must call typeahead before jquery ui the first time.
+      require(["handlebars", "typeahead", "jqueryui", "components/app/app", "dojo/domReady!"], function () {
+
+        if (!jQuery) {
+          alert("loader: jQuery load error.");
+        }
+
+      });
+
+    });
+
+  };
+
+  loader();
+
+</script>
+
+</html>

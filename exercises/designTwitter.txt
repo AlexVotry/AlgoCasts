@@ -1,0 +1,38 @@
+Twitter.
+
+Start with "what particular area would you like me to focus on?"
+
+Start with data model:
+How to store users or tweets in db.
+then
+how the web interface would be used.
+
+web framework on client side:
+
+Example:
+1. identify two Core Features in the product;
+  examples:
+    a. how to tweet
+    b. user feed of tweets
+2. Possible implementation:
+  examples;
+    tweet: 
+      1.  What does a tweet look like in a db?
+      2. How to make the "#" topeic and "@" mentions?
+      3. How to implment retweets?
+    Feed:
+      How to show interesting tweets at top of feed.
+3. Identify and Address difficulties
+  examples:
+4. Solutions for scaling:
+  examples:
+    caching data.
+    deployment options:
+  
+  Caching:
+    after calulating list store in memCache or redis.
+    when they come back in next 5 minutes, reuse cache.
+  
+  deployment options:
+  Load Balancer:
+  

@@ -16,6 +16,10 @@ function palindrome(str) {
 module.exports = palindrome;
 
 // function palindrome(str) {
+//   return str === str.split('').reverse().join('');
+// }
+
+// function palindrome(str) {
 //   const reversed = str
 //     .split('')
 //     .reverse()
